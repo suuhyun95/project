@@ -30,7 +30,6 @@ public class JDBCTemplate {
             //navigator로 확인할 것 
             String fileName= JDBCTemplate.class.getResource("/driver.properties") //URL정보를 리턴해줌
                                                 .getPath(); //String으로 하기위해서는 이걸 써줘야함
-            System.out.println("fileName@JDBCTemplate="+fileName);
             //1.수정
             prop.load(new FileReader(fileName));
             

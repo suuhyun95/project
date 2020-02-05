@@ -84,8 +84,11 @@
 	    let userPwVal = password_.value.trim();
 	    if (userPwVal.length == 0) {
 	        document.getElementById("errorPw").innerHTML = "<font color=red>*비밀번호를 입력하지 않았습니다.</font>";
-	        sgpassword.focus();
+	        password_.focus();
 	    } else {
 	        document.getElementById("errorPw").innerHTML = "";
 	    }
 	};
+	
+	
+	

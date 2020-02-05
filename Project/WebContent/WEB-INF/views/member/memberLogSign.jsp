@@ -30,11 +30,11 @@
                     <input type="tel" placeholder="Phone Number(-없이)"name="phone" id="phone" maxlength="11" required>
                     <span class="error" id="errorPhone"></span>
                     <input type="date" name="birthday" id="brithday" required>
-                    <button type=>Sign Up</button>
+                    <button type="submit">Sign Up</button>
                 </form>
             </div>
             <div class="form-container sign-in-container">
-                <form action="#">
+                <form action="<%=request.getContextPath()%>/member/memeberLogin">
                     <h1>로그인</h1>
                     <div class="social-container">
                         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>
@@ -42,8 +42,8 @@
                         <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                     <span>or use your account</span>
-                    <input type="email" placeholder="Email" />
-                    <input type="password" placeholder="Password" />
+                    <input type="email" placeholder="Email" name="loginEmail"/>
+                    <input type="password" placeholder="Password" name="loginPassword"/>
                     <a href="#">Forgot your password?</a>
                     <button>Sign In</button>
                 </form>
@@ -63,6 +63,30 @@
                 </div>
             </div>
         </div>
+        <script>
+      //아이디 사용여부
+    	$("#email").keyup(function(e){
+    		let email = $(this).val().trim();
+    		$.ajax({
+    			url: "<%=request.getContextPath()%>/member/chekckIdDuplicate.do",
+    			data: {email: email},
+    			dataType : "text",
+    			success: function(data){
+    				//입력한 이메일이 DB에 있는지 없는지에 따른 결과를 출력한다.
+    				if(data==0){
+    					$("#errorEmail").html("사용가능한 이메일입니다.");
+    				}else{
+    					$("#errorEmail").html("<font color='red'>사용중인 이메일입니다.</font>");
+    				}
+    			},
+    			error: function(){
+    				alert("에러가 발생했습니다. 관리자에게 문의 하세요");
+    			}
+    			
+    		});
+    		
+    	});
+        </script>
         <script src="<%=request.getContextPath()%>/js/member/member.js"></script>
 </body>
 </html>

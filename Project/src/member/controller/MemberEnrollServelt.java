@@ -45,9 +45,9 @@ public class MemberEnrollServelt extends HttpServlet {
 		
 		//업무로직
 		Member m = new Member();
-		m.setEmail(email);
+		m.setMemberEmail(email);
 		m.setPassword(password);
-		m.setName(memberName);
+		m.setMemberName(memberName);
 		m.setPhone(phone);
 		m.setBirthDay(birthday_);
 		
