@@ -15,11 +15,11 @@ import board.free_board.model.vo.FreeBoard;
 /**
  * Servlet implementation class FreeBoardListServlet
  */
-@WebServlet("/board/free/freeBoardList")
+@WebServlet("/board/free_board/freeBoardList")
 public class FreeBoardListServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     
-	private FreeBoardSerivce freeBoardService = new FreeBoardListServlet();
+	private FreeBoardSerivce freeBoardService = new FreeBoardSerivce();
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -51,7 +51,7 @@ public class FreeBoardListServlet extends HttpServlet {
 		 */
 		
 		//1.파라미터 핸들링
-		final int numPerPage = 10;
+		final int numPerPage = 2;
 		int cPage = 1;
 		
 		try {
@@ -64,13 +64,15 @@ public class FreeBoardListServlet extends HttpServlet {
 		List<FreeBoard> list = freeBoardService.selectBoardList(cPage, numPerPage);
 		
 		//3.뷰단 처리
-		int totalContents = freeBoardService.selecTotalContents();
+		int totalContents = freeBoardService.selectTotalContents();
 		
 		int totalPage = (int)Math.ceil(((double)totalContents/numPerPage));
+		
 		
 		final int pageBarSize = 5;
 		
 		final int pageStart = ((cPage-1)/pageBarSize)*pageBarSize+1;
+		final int pageEnd = pageStart+pageBarSize-1;
 		int pageNo = pageStart;
 		
 		String pageBar = "";
@@ -80,13 +82,34 @@ public class FreeBoardListServlet extends HttpServlet {
 		//이전페이지버튼을 비활성하는 경우
 		if(pageNo ==1) {
 			pageBar += "<span>[이전]</span>";
-		}else {
-			pageBar += "<a href='freeBoardList?cPage'>"+pageNo+"</a>";
 		}
+		else {
+			pageBar += "<a href='freeBoardList?cPage="+(pageNo-1)+"'>[이전]</a>";
+		}
+		
+		//[pageNo]
+		while(pageNo <= pageEnd && pageNo <= totalPage) {
+			if(pageNo == cPage) {
+				pageBar += "<span class='cPage'>"+pageNo+"</span>";
+			}
+			else {
+				pageBar += "<a href='freeBoardList?cPage="+pageNo+"'>"+pageNo+"</a>";
+			}	
+			pageNo++;
+		}
+		
+		//[다음]
+		if(pageNo > totalPage) {
+			pageBar += "<span>[다음]</span>";
+			System.out.println("pageNo="+pageNo);
+			System.out.println("totalPage="+totalPage);
+		}else {
+			pageBar += "<a href='freeBoardList?cPage="+pageNo+"'>[다음]</a>";
+		}	
 		
 		request.setAttribute("pageBar", pageBar);
 		request.setAttribute("list", list);
-		request.getRequestDispatcher("/WEB-INF/views/board/freeBoardList.jsp").forward(request, response);
+		request.getRequestDispatcher("/WEB-INF/views/board/free_board/freeBoardList.jsp").forward(request, response);
 	}
 	
 

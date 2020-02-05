@@ -16,4 +16,11 @@ public class FreeBoardSerivce {
 		return list;
 	}
 
+	public int selectTotalContents() {
+		Connection conn = getConnection();
+		int totalContents = new FreeBoardDAO().selectTotalContents(conn);
+		close(conn);
+		return totalContents;
+	}
+
 }

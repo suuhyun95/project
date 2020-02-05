@@ -920,5 +920,8 @@
             </div>
         </div>
         <%@ include file="/WEB-INF/views/member/memberLogSign.jsp" %>
+        <form action="<%=request.getContextPath() %>/gogo-admin" method="post">
+		<input type="hidden" name="admin_login" value="" />
+        </form>
     </body>
 </html>

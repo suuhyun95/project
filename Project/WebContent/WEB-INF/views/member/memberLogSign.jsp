@@ -34,7 +34,7 @@
                 </form>
             </div>
             <div class="form-container sign-in-container">
-                <form action="<%=request.getContextPath()%>/member/memeberLogin">
+                <form action="<%=request.getContextPath()%>/member/memeberLogin" method="get">
                     <h1>로그인</h1>
                     <div class="social-container">
                         <a href="#" class="social"><i class="fab fa-facebook-f"></i></a>

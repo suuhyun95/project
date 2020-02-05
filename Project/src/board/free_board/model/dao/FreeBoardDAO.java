@@ -21,7 +21,7 @@ public class FreeBoardDAO {
 	
 	public FreeBoardDAO() {
 		//sql member prorperties 불러오기
-				String fileName = MemberDAO.class.getResource("/sql/board/free_board/freeBoarder-query.properties").getPath();
+				String fileName = MemberDAO.class.getResource("/sql/board/free_board/freeBoard-query.properties").getPath();
 				
 				try {
 					prop.load(new FileReader(fileName));
@@ -33,7 +33,8 @@ public class FreeBoardDAO {
 					e.printStackTrace();
 				}
 	}
-
+	
+	//게시물 표현
 	public List<FreeBoard> selectBoardList(Connection conn, int cPage, int numPerPage) {
 		PreparedStatement pstmt = null;
 		ResultSet rset = null;
@@ -45,6 +46,7 @@ public class FreeBoardDAO {
 			pstmt = conn.prepareStatement(query);
 			int startRownum = (numPerPage*cPage)-(numPerPage-1);
 			int endRownum = numPerPage*cPage;
+			
 			pstmt.setInt(1, startRownum);
 			pstmt.setInt(2, endRownum);
 			rset = pstmt.executeQuery();
@@ -71,5 +73,31 @@ public class FreeBoardDAO {
 		}
 		
 		return list;
+	}
+	
+	//총 게시물 갯수
+	public int selectTotalContents(Connection conn) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		int totalContents = 0;
+		String query = prop.getProperty("selectTotalContents");
+		
+		try {
+			//미완성 쿼리 값 대입
+			pstmt= conn.prepareStatement(query);
+			rset = pstmt.executeQuery();
+			if(rset.next()) {
+				totalContents = rset.getInt("cnt");
+			}
+				
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			close(pstmt);
+			close(rset);
+		}
+		
+		return totalContents;
 	}
 }
