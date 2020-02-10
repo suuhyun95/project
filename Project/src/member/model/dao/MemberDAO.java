@@ -128,5 +128,89 @@ public class MemberDAO {
 			
 		return m;
 	}
+	
+	//아이디 찾기 DAO
+	public Member idFind(Connection conn, String findName) {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		Member m = null;
+		String query = prop.getProperty("idFind");
+		
+		try {
+			//미완성쿼리객체 생성
+			pstmt = conn.prepareStatement(query);
+			
+			//미완성쿼리 값 대입
+			pstmt.setString(1, findName);
+			
+			//쿼리 실행
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				m = new Member();
+				
+				m.setMemberNo(rset.getString("member_no"));
+				m.setMemberEmail(rset.getString("member_email"));
+				m.setPassword(rset.getString("member_password"));
+				m.setMemberName(rset.getString("member_name"));
+				m.setBirthDay(rset.getDate("member_birth"));
+				m.setPhone(rset.getString("member_phone"));
+				m.setEnrollDate(rset.getDate("member_enrolldate"));
+				m.setGrade(rset.getString("grade"));
+				
+				
+			}
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+			close(rset);
+		}
+		
+		return m;
+	}
+	
+	//패스워드 찾기 DAO
+	public Member passwordFind(Connection conn, String fpEmail) {
+		
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		Member m = null;
+		String query = prop.getProperty("passwordFind");
+
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			
+			pstmt.setString(1, fpEmail);
+
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				m = new Member();
+				
+				m.setMemberNo(rset.getString("member_no"));
+				m.setMemberEmail(rset.getString("member_email"));
+				m.setPassword(rset.getString("member_password"));
+				m.setMemberName(rset.getString("member_name"));
+				m.setBirthDay(rset.getDate("member_birth"));
+				m.setPhone(rset.getString("member_phone"));
+				m.setEnrollDate(rset.getDate("member_enrolldate"));
+				m.setGrade(rset.getString("grade"));
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally {
+			close(pstmt);
+			close(rset);
+		}
+		
+		return m;
+	}
 
 }

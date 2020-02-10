@@ -3,6 +3,7 @@ package member.model.vo;
 import java.io.Serializable;
 import java.sql.Date;
 
+
 public class Member implements Serializable {
 	
 	/**
@@ -88,6 +89,7 @@ public class Member implements Serializable {
 				+ ", memberName=" + memberName + ", birthDay=" + birthDay + ", phone=" + phone + ", enrollDate="
 				+ enrollDate + ", grade=" + grade + "]";
 	}
+
 	
 	
 	

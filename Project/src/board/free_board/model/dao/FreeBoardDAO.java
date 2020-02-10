@@ -10,10 +10,13 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
+
+
 import static common.JDBCTemplate.*;
 
 import board.free_board.model.vo.FreeBoard;
-import member.model.dao.MemberDAO;
+import board.free_board.model.vo.FreeBoardComment;
+
 
 public class FreeBoardDAO {
 	
@@ -21,7 +24,7 @@ public class FreeBoardDAO {
 	
 	public FreeBoardDAO() {
 		//sql member prorperties 불러오기
-				String fileName = MemberDAO.class.getResource("/sql/board/free_board/freeBoard-query.properties").getPath();
+				String fileName = FreeBoardDAO.class.getResource("/sql/board/free_board/freeBoard-query.properties").getPath();
 				
 				try {
 					prop.load(new FileReader(fileName));
@@ -54,7 +57,7 @@ public class FreeBoardDAO {
 				b = new FreeBoard();
 				b.setFreeBoardNo(rset.getInt("free_board_no"));
 				b.setFreeBoardTitle(rset.getString("free_board_title"));
-				b.setFreeBoardWriter(rset.getString("free_board_writer"));
+				b.setFreeBoardWriter(rset.getString("member_name"));
 				b.setFreeBoardContent(rset.getString("free_board_content"));
 				b.setFreeOriginalFileName(rset.getString("free_board_original_filename"));
 				b.setFreeRenamedFileName(rset.getString("free_board_renamed_filename"));
@@ -100,4 +103,234 @@ public class FreeBoardDAO {
 		
 		return totalContents;
 	}
+	//선택한 게시글
+	public FreeBoard selectBoard(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		FreeBoard b = null;
+		String query = prop.getProperty("selectBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, boardNo);
+			rset = pstmt.executeQuery();
+			
+			if(rset.next()) {
+				b = new FreeBoard();
+				b.setFreeBoardNo(rset.getInt("free_board_no"));
+				b.setFreeBoardTitle(rset.getString("free_board_title"));
+				b.setFreeBoardWriter(rset.getString("member_name"));
+				b.setFreeBoardContent(rset.getString("free_board_content"));
+				b.setFreeOriginalFileName(rset.getString("free_board_original_filename"));
+				b.setFreeRenamedFileName(rset.getString("free_board_renamed_filename"));
+				b.setFreeBoardDate(rset.getDate("free_board_date"));
+				b.setFreeReadCount(rset.getInt("free_board_readcount"));
+			}
+
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+			close(rset);
+		}
+		return b;
+	}
+	
+	//조회수
+	public int increaseReadCount(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		int result =0;
+		String query = prop.getProperty("increaseReadCount");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, boardNo);
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+	public List<FreeBoardComment> selectCommentList(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		FreeBoardComment b = null;
+		List<FreeBoardComment> list = new ArrayList<FreeBoardComment>();
+		String query = prop.getProperty("selectCommentList");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, boardNo);
+			rset = pstmt.executeQuery();
+			
+			while(rset.next()) {
+				b = new FreeBoardComment();
+				b.setFreeBoardCommentNo(rset.getInt("free_board_comment_no"));
+				b.setFreeBoardCommentLevel(rset.getInt("free_board_comment_level"));
+				b.setFreeBoardCommentWriter(rset.getString("member_name"));
+				b.setFreeBoardCommentContent(rset.getString("free_board_comment_content"));
+				b.setFreeBoardRef(rset.getInt("free_board_ref"));
+				b.setFreeBoardCommentRef(rset.getInt("free_board_comment_ref"));
+				b.setFreeBoardCommentDate(rset.getDate("free_board_comment_date"));
+				
+				list.add(b);
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			
+		}finally{
+			close(pstmt);
+			close(rset);
+		}
+		return list;
+	}
+	
+	//댓글 입력
+	public int insertBoardComment(Connection conn, FreeBoardComment bc) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String query = prop.getProperty("insertBoardComment");
+		System.out.println("dao");
+		System.out.println(bc.getFreeBoardCommentLevel());
+		System.out.println(bc.getFreeBoardCommentWriter());
+		System.out.println(bc.getFreeBoardCommentContent());
+		System.out.println(bc.getFreeBoardRef());
+		System.out.println(bc.getFreeBoardCommentRef());
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, bc.getFreeBoardCommentLevel());
+			pstmt.setString(2, bc.getFreeBoardCommentWriter());
+			pstmt.setString(3, bc.getFreeBoardCommentContent());
+			pstmt.setInt(4, bc.getFreeBoardRef());
+			
+			//참조하는 댓글 -> 대댓인지 댓글인지..
+			//댓글 참조: board_comment_ref
+			//댓글 : null
+			//대댓글 : 참조하는 댓글의 board_comment_no
+			pstmt.setString(5, bc.getFreeBoardCommentRef()==0?null:String.valueOf(bc.getFreeBoardCommentRef()));
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+
+	public int deleteComment(Connection conn, int delNo) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String query = prop.getProperty("deleteComment");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, delNo);
+			
+			result = pstmt.executeUpdate();
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			close(pstmt);
+		}
+		return result;
+	}
+	
+	//게시물 삭제
+	public int deleteBoard(Connection conn, int boardNo) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String query = prop.getProperty("deleteBoard");
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setInt(1, boardNo);
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			close(pstmt);
+		}
+		
+		
+		return result;
+	}
+
+	public int insertBoard(Connection conn, FreeBoard b) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String query = prop.getProperty("insertBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, b.getFreeBoardTitle());
+			pstmt.setString(2, b.getFreeBoardWriter());
+			pstmt.setString(3, b.getFreeBoardContent());
+			pstmt.setString(4, b.getFreeOriginalFileName());
+			pstmt.setString(5, b.getFreeRenamedFileName());
+			
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally{
+			close(pstmt);
+		}
+		return result;
+	}
+
+	public int selectLastSeq(Connection conn) {
+		int boardNo = 0;
+		PreparedStatement pstmt = null;
+		ResultSet rset = null;
+		String query = prop.getProperty("selectLastSeq");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			rset = pstmt.executeQuery();
+			if(rset.next())
+				boardNo = rset.getInt("boardno");
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(rset);
+			close(pstmt);
+		}
+		return boardNo;
+	}
+
+	public int updateBoard(Connection conn, FreeBoard b) {
+		PreparedStatement pstmt = null;
+		int result = 0;
+		String query = prop.getProperty("updateBoard");
+		
+		try {
+			pstmt = conn.prepareStatement(query);
+			pstmt.setString(1, b.getFreeBoardTitle());
+			pstmt.setString(2, b.getFreeBoardContent());
+			pstmt.setString(3, b.getFreeOriginalFileName());
+			pstmt.setString(4, b.getFreeRenamedFileName());
+			pstmt.setInt(5, b.getFreeBoardNo());
+			result = pstmt.executeUpdate();
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}finally {
+			close(pstmt);
+		}
+		return result;
+	}
+	
 }

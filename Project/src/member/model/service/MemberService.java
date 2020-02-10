@@ -42,5 +42,22 @@ public class MemberService {
 		
 		return m;
 	}
+	
+	//아이디 찾기 service
+	public Member idFind(String findName) {
+		Connection conn = getConnection();
+		Member m = new MemberDAO().idFind(conn, findName);
+		close(conn);
+		
+		return m;
+	}
+	
+	//패스워드 찾기 service
+	public Member passwordFind(String fpEmail) {
+		Connection conn = getConnection();
+		Member m = new MemberDAO().passwordFind(conn, fpEmail);
+		close(conn);
+		return m;
+	}
 
 }

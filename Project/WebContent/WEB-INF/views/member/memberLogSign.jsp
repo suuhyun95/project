@@ -1,5 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%
+	/* String saveId = (String)request.getParameter("saveId"); */
+
+	//쿠키확인
+	Cookie[] cookies = request.getCookies();
+	boolean saveIdChecked = false;
+	String memberId = "";
+	
+	if(cookies != null){
+		//System.out.println("cookies@header.jsp");
+		//System.out.println("===================================");
+		for(Cookie c : cookies){
+			String name = c.getName();
+			String value = c.getValue();
+			//System.out.println(name + " = " + value);
+			
+			if("saveId".equals(name)){
+				saveIdChecked = true;
+				memberId = value;
+			}
+		}
+		//System.out.println("===================================");
+		
+	}
+
+
+%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -42,9 +69,12 @@
                         <a href="#" class="social"><i class="fab fa-linkedin-in"></i></a>
                     </div>
                     <span>or use your account</span>
-                    <input type="email" placeholder="Email" name="loginEmail"/>
-                    <input type="password" placeholder="Password" name="loginPassword"/>
-                    <a href="#">Forgot your password?</a>
+                    <input type="email" placeholder="Email" name="loginEmail" id="loginEmail" />
+                    <input type="checkbox" name="saveId" id="saveId" <%=saveIdChecked?"checked":"" %>/>
+					<label for="saveId">아이디 저장</label>
+                    <input type="password" placeholder="Password" name="loginPassword" id="loginPassword" />
+                    <!-- 아이디/비밀번호 찾기 페이지 -->
+                    <a href="<%=request.getContextPath()%>/member/memeberFind">Forgot your password?</a>
                     <button>Sign In</button>
                 </form>
             </div>

@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import admin.model.service.AdminService;
 import member.model.service.MemberService;
 import member.model.vo.Member;
 import tour_staff.model.service.StaffService;
@@ -18,14 +19,14 @@ import tour_staff.model.vo.Staff;
 /**
  * Servlet implementation class AdminLoginEnd
  */
-@WebServlet("/admin/adminLoginEnd")
-public class AdminLoginEnd extends HttpServlet {
+@WebServlet("/gogo-admin/adminLoginEnd")
+public class AdminLoginEndServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public AdminLoginEnd() {
+	public AdminLoginEndServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -42,9 +43,9 @@ public class AdminLoginEnd extends HttpServlet {
 		String email = request.getParameter("email");
 		String password = request.getParameter("password");
 
-		Member admin = new MemberService().selectOne(email);
-
+		Member admin = new AdminService().selectAdminOne(email);
 		System.out.println("admin객체=" + admin);
+		
 		Staff staff = new StaffService().selectOne(email);
 		System.out.println("staff객체=" + staff);
 		String msg = "";
@@ -78,7 +79,10 @@ public class AdminLoginEnd extends HttpServlet {
 
 				// 로그인후 인덱스페이지로 리다이렉트처리
 				// 클라이언트로 하여금 이 url(/mvc)로 다시 요청하도록함.
-				response.sendRedirect(request.getContextPath());
+				//response.sendRedirect(request.getContextPath());
+				
+				//관광지관리자 페이지로 이동
+				request.getRequestDispatcher("/WEB-INF/views/staff/staffDashboard.jsp").forward(request, response);
 
 				return; // 코드가 더 흐르지 않도록 리턴문 작성
 
@@ -88,9 +92,12 @@ public class AdminLoginEnd extends HttpServlet {
 				msg = "입력하신 비밀번호가 틀렸습니다.";
 			}
 
-		} else if (admin != null) {
+		} 
+		//관리자 로그인
+		else if (admin != null) {
 			// 아이디와 비밀번호 일치
 			if (password.equals(admin.getPassword())) {
+				log = "/";
 				msg = "로그인 성공!";
 				HttpSession session = request.getSession();
 
@@ -114,8 +121,10 @@ public class AdminLoginEnd extends HttpServlet {
 
 				// 로그인후 인덱스페이지로 리다이렉트처리
 				// 클라이언트로 하여금 이 url(/mvc)로 다시 요청하도록함.
-				response.sendRedirect(request.getContextPath());
-
+				//response.sendRedirect(request.getContextPath());
+				
+				//관리자페이지로 이동
+				request.getRequestDispatcher("/WEB-INF/views/admin/adminDashboard.jsp").forward(request, response);
 				return; // 코드가 더 흐르지 않도록 리턴문 작성
 
 			}
@@ -129,7 +138,7 @@ public class AdminLoginEnd extends HttpServlet {
 		msg = "존재하지 않는 아이디입니다.";
 		
 
-		// 관리자 로그인
+
 
 		request.setAttribute("msg", msg);
 		request.setAttribute("log", log);

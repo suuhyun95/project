@@ -11,13 +11,13 @@ import javax.servlet.http.HttpServletResponse;
  * Servlet implementation class AdminLogin
  */
 @WebServlet("/gogo-admin")
-public class AdminLogin extends HttpServlet {
+public class AdminLoginServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
        
     /**
      * @see HttpServlet#HttpServlet()
      */
-    public AdminLogin() {
+    public AdminLoginServlet() {
         super();
         // TODO Auto-generated constructor stub
     }

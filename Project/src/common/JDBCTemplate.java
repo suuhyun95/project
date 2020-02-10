@@ -34,7 +34,7 @@ public class JDBCTemplate {
             prop.load(new FileReader(fileName));
             
             //Property내역 출력
-            prop.list(System.out);
+//            prop.list(System.out);
             
             String driver = prop.getProperty("driver");
             String url =prop.getProperty("url");

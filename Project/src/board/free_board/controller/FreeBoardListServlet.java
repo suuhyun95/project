@@ -51,7 +51,7 @@ public class FreeBoardListServlet extends HttpServlet {
 		 */
 		
 		//1.파라미터 핸들링
-		final int numPerPage = 2;
+		final int numPerPage = 5;
 		int cPage = 1;
 		
 		try {
@@ -59,7 +59,7 @@ public class FreeBoardListServlet extends HttpServlet {
 		}catch(NumberFormatException e) {
 			
 		}
-		
+
 		//2.업무로직
 		List<FreeBoard> list = freeBoardService.selectBoardList(cPage, numPerPage);
 		
@@ -81,34 +81,40 @@ public class FreeBoardListServlet extends HttpServlet {
 		//[이전]
 		//이전페이지버튼을 비활성하는 경우
 		if(pageNo ==1) {
-			pageBar += "<span>[이전]</span>";
+			
+			pageBar += "<i class='far fa-caret-square-left' style='font-size:24px'></i>";
 		}
 		else {
-			pageBar += "<a href='freeBoardList?cPage="+(pageNo-1)+"'>[이전]</a>";
+			pageBar += "<a href='freeBoardList?cPage="+(pageNo-1)+"'><i class='fas fa-caret-square-left' style='font-size:24px'></i></a>";
 		}
 		
 		//[pageNo]
 		while(pageNo <= pageEnd && pageNo <= totalPage) {
 			if(pageNo == cPage) {
-				pageBar += "<span class='cPage'>"+pageNo+"</span>";
+				pageBar += "<span class='cPage'><button class='w3-btn w3-white w3-border' disabled>"+pageNo+"</button></span>";
 			}
 			else {
-				pageBar += "<a href='freeBoardList?cPage="+pageNo+"'>"+pageNo+"</a>";
+				pageBar += "<a href='freeBoardList?cPage="+pageNo+"'><button class='w3-btn w3-white w3-border'>"+pageNo+"</button></a>";
 			}	
 			pageNo++;
 		}
 		
 		//[다음]
 		if(pageNo > totalPage) {
-			pageBar += "<span>[다음]</span>";
+			pageBar += "<i class='far fa-caret-square-right' style='font-size:24px'></i>";
 			System.out.println("pageNo="+pageNo);
 			System.out.println("totalPage="+totalPage);
 		}else {
-			pageBar += "<a href='freeBoardList?cPage="+pageNo+"'>[다음]</a>";
+			pageBar += "<a href='freeBoardList?cPage="+pageNo+"'><i class='fas fa-caret-square-right' style='font-size:24px'></i></a>";
 		}	
+		
+		
+		//작성자 이름 찾기
+		
 		
 		request.setAttribute("pageBar", pageBar);
 		request.setAttribute("list", list);
+		request.setAttribute("cPage", cPage);
 		request.getRequestDispatcher("/WEB-INF/views/board/free_board/freeBoardList.jsp").forward(request, response);
 	}
 	
