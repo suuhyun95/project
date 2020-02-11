@@ -6,7 +6,6 @@
 	String pageBar = (String)request.getAttribute("pageBar");
 	List<Staff_Board> list = (List<Staff_Board>)request.getAttribute("list");
 	Integer cPage = (Integer)request.getAttribute("cPage");
-	List<String> memberName = (List)request.getAttribute("memberName");
 %>
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
@@ -51,9 +50,7 @@
                 	</a>
                 </td>
                 <td><%=b.getStaff_OriginalFileName()!= null?"<img src='"+request.getContextPath()+"/images/board/file.png' width='16px'/>":"" %></td>
-				<%for(String Mname : memberName) {%>
-				<td><%=Mname%></td>
-				<%} %>
+				<td><%=b.getStaff_BoardWriter()%></td>
                 <td><%=b.getStaff_BoardDate()%></td>
                 <td><%=b.getStaff_ReadCount()%></td>
             </tr>		

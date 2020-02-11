@@ -8,7 +8,6 @@
 	Staff_Board board = (Staff_Board)request.getAttribute("board");
 	Integer cPage = (Integer)request.getAttribute("cPage");
 	String memberName = (String)request.getAttribute("memberName");
-
 %>
 <%@ include file="/WEB-INF/views/common/header.jsp"%>
 <link rel="stylesheet"
@@ -224,7 +223,7 @@ $(".btn-reply").click(function(){
 		var tr = $("<tr></tr>");
 		var td = $("<td style = 'display:none; text-align:left;' colspan='2'></td>")
 		var form = $("<form action='<%=request.getContextPath()%>/board/staff_board/staff_BoardCommentInsert' method='POST'></form>");
-		form.append("<input type='hidden' name='boardRef' value='<%=board.getstaff_BoardNo()%>'/>");
+		form.append("<input type='hidden' name='boardRef' value='<%=board.gettaff_BoardNo()%>'/>");
 		form.append("<input type='hidden' name='boardCommentWriter' value='<%=memberLoggedIn!=null?memberLoggedIn.getMemberNo():""%>'/>");
 		form.append("<input type='hidden' name='boardCommentLevel' value='2'/>");
 		form.append("<input type='hidden' name='boardCommentRef' value='"+boardCommentNo+"'/>");

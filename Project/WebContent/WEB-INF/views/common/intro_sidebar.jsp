@@ -11,12 +11,12 @@
                 <li class="item" id="messages">
                     <a href="#messages" class="btn"><i class="fas fa-ticket-alt"></i> 관광명소</a>
                     <div class="smenu">
-                        <a href="">자연</a>
-                        <a href="">공원</a>
-                        <a href="">마을</a>
-                        <a href="">박물관 | 전시관</a>
-                        <a href="">문화유적</a>
-                        <a href="">레저 | 체험</a>
+                        <a href="<%=request.getContextPath() %>/intro/GunsInfoNature">자연</a>
+                        <a href="<%=request.getContextPath() %>/intro/GunsInfoPark">공원</a>
+                        <a href="<%=request.getContextPath() %>/intro/GunsInfoTown">마을</a>
+                        <a href="<%=request.getContextPath() %>/intro/GunsInfoMuseum">박물관 | 전시관</a>
+                        <a href="<%=request.getContextPath() %>/intro/GunsInfoRuins">문화유적</a>
+                        <a href="<%=request.getContextPath() %>/intro/GunsInfoLeisure">레저 | 체험</a>
                     </div>
                 </li>
                 

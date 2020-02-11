@@ -138,25 +138,7 @@ public class Staff_BoardSerivce {
 		close(conn);
 		return result;
 	}
-	//view에서 보여질 회원 이름
-	public String selectName(Staff_Board b) {
-		Connection conn = getConnection();
-		
-		String name = new Staff_BoardDAO().selectName(conn, b);
-		
-		close(conn);
-		return name;
-	}
-	//list에서 보여질 회원 이름
-	public List<String> selectName(String writer) {
-		Connection conn = getConnection();
-		
-		List<String> name = new Staff_BoardDAO().selectName(conn,writer);
-		
-		close(conn);
-		
-		return name;
-	}
+
 
 	
 

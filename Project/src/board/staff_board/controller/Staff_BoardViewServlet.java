@@ -74,8 +74,6 @@ public class Staff_BoardViewServlet extends HttpServlet {
 		//2.업무로직
 		Staff_Board b = new Staff_BoardSerivce().selectBoard(boardNo, hasRead);
 		
-		//회원이름 가져오기
-		String memberName = new Staff_BoardSerivce().selectName(b);
 		//댓글 가져오기
 		List<Staff_BoardComment> list = new Staff_BoardSerivce().selectCommentList(boardNo);
 		String msg ="";
@@ -89,7 +87,6 @@ public class Staff_BoardViewServlet extends HttpServlet {
 			request.getRequestDispatcher("/WEB-INF/views/common/msg.jsp");
 		}else {
 			request.setAttribute("cPage", cPage);
-			request.setAttribute("memberName", memberName);
 			request.setAttribute("board", b);
 			request.setAttribute("list", list);
 			request.getRequestDispatcher("/WEB-INF/views/board/staff_board/staff_BoardView.jsp").forward(request, response);

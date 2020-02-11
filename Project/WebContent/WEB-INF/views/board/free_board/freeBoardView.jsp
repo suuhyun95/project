@@ -9,7 +9,6 @@
 	FreeBoard board = (FreeBoard)request.getAttribute("board");
 	Integer cPage = (Integer)request.getAttribute("cPage");
 
-	
 
 %>
 <link rel="stylesheet"
@@ -266,7 +265,6 @@ function deleteBoard(){
 }
 function fileDownload(oName, rName){
 	oName = encodeURIComponent(oName);
-	console.log(oName);
 	
 	location.href = "<%=request.getContextPath()%>/board/free_board/freeBoardFileDownload"+ "?oName=" + oName + "&rName=" + rName;
 

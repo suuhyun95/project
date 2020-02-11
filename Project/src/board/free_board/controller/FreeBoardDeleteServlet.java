@@ -39,7 +39,7 @@ public class FreeBoardDeleteServlet extends HttpServlet {
 		String loc ="/board/free_board/freeBoardList";
 		
 		String filePath = getServletContext().getRealPath("/upload/board/free_board")+"/"+rName;
-		
+
 		File file = new File(filePath);
 		
 		if(result > 0 && file.exists()==true) {

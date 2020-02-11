@@ -6,7 +6,6 @@
 	String pageBar = (String)request.getAttribute("pageBar");
 	List<FreeBoard> list = (List<FreeBoard>)request.getAttribute("list");
 	Integer cPage = (Integer)request.getAttribute("cPage");
-	System.out.println(cPage+"durl");
 %>
 
 <%@ include file="/WEB-INF/views/common/header.jsp" %>
